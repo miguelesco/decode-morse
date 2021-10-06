@@ -41,7 +41,6 @@ def decode(message = "")
     end
 
     if char == " " || char == '/'
-      puts "space"
       counter += 1
       if counter == 3
         space = true
@@ -49,7 +48,6 @@ def decode(message = "")
     end
 
     if char == " " && morse_code[code] || index + 1 == message_length
-      puts morse_code[code]
       if space
         decode_message += " "
         space = false
