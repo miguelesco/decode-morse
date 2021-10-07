@@ -1,59 +1,69 @@
-def decode(message = '')
-  morse_code = {
-    '.-' => 'A',
-    '-...' => 'B',
-    '-.-.' => 'C',
-    '-..' => 'D',
-    '.' => 'E',
-    '..-.' => 'F',
-    '--.' => 'G',
-    '....' => 'H',
-    '..' => 'I',
-    '.---' => 'J',
-    '-.-' => 'K',
-    '.-..' => 'L',
-    '--' => 'M',
-    '-.' => 'N',
-    '---' => 'O',
-    '.--.' => 'P',
-    '--.-' => 'Q',
-    '.-.' => 'R',
-    '...' => 'S',
-    '-' => 'T',
-    '..-' => 'U',
-    '...-' => 'V',
-    '.--' => 'W',
-    '-..-' => 'X',
-    '-.--' => 'Y',
-    '--..' => 'Z'
-  }
-  message_length = message.length
-  decode_message = ''
-  code = ''
-  space = false
-  counter = 0
-  message.each_char.with_index do |char, index|
-    if ['-', '.'].include?(char)
-      code += char
-      counter = 0
-    end
+MORSE_DIC = {
+  '.-' => 'A',
+  '-...' => 'B',
+  '-.-.' => 'C',
+  '-..' => 'D',
+  '.' => 'E',
+  '..-.' => 'F',
+  '--.' => 'G',
+  '....' => 'H',
+  '..' => 'I',
+  '.---' => 'J',
+  '-.-' => 'K',
+  '.-..' => 'L',
+  '--' => 'M',
+  '-.' => 'N',
+  '---' => 'O',
+  '.--.' => 'P',
+  '--.-' => 'Q',
+  '.-.' => 'R',
+  '...' => 'S',
+  '-' => 'T',
+  '..-' => 'U',
+  '...-' => 'V',
+  '.--' => 'W',
+  '-..-' => 'X',
+  '-.--' => 'Y',
+  '--..' => 'Z',
+  ' ' => ' ',
+  '.----' => '1',
+  '..---' => '2',
+  '...--' => '3',
+  '....-' => '4',
+  '.....' => '5',
+  '-....' => '6',
+  '--...' => '7',
+  '---..' => '8',
+  '----.' => '9',
+  '-----' => '0'
+}.freeze
 
-    if [' ', '/'].include?(char)
-      counter += 1
-      space = true if counter == 3
-    end
-
-    if (char == ' ' && morse_code[code]) || index + 1 == message_length
-      if space
-        decode_message += ' '
-        space = false
-        counter = 0
-      end
-      decode_message += morse_code[code]
-      code = ''
-    end
-  end
-  decode_message
+def decode_char(char = '')
+  decoded_char = MORSE_DIC[char]
+  decoded_char || ''
 end
 
-puts decode(' .-   -... --- -..-   ..-. ..- .-.. .-..   --- ..-. / .-. ..- -... .. . ...')
+def decode_word(word = '')
+  chars = word.split
+  decoded_word = ''
+
+  chars.each do |char|
+    decoded_word += decode_char(char)
+  end
+
+  decoded_word
+end
+
+def decode(code = '')
+  code = code.gsub('/', ' ')
+  words = code.split('   ')
+  decoded_code = ''
+
+  words.each do |word|
+    decoded_code += "#{decode_word(word)} "
+  end
+
+  decoded_code
+end
+
+puts(decode('.-   -... --- -..-  ..-. ..- .-.. .-..   --- ..-. / .-. ..- -... .. . ...'))
